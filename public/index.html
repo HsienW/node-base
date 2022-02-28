@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Index</title>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+    import {refreshShopList, bindShopInfoEvents} from './index.js';
+
+    async function bootstrap() {
+        await refreshShopList();
+        await bindShopInfoEvents();
+    }
+
+    bootstrap();
+</script>
+</body>
+</html>
