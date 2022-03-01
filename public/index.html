@@ -3,11 +3,16 @@
 <head>
     <meta charset="utf-8">
     <title>Index</title>
+    <link rel="stylesheet" href="./index.css"/>
 </head>
 <body>
 <div id="root"></div>
 <script type="module">
+    import './glue.js';
     import {refreshShopList, bindShopInfoEvents} from './index.js';
+
+    console.log('=================');
+    console.log(window);
 
     async function bootstrap() {
         await refreshShopList();
