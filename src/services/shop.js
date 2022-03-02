@@ -57,6 +57,21 @@ class ShopService {
 
         return delete memoryStorage[id];
     }
+
+    async create({values}) {
+        await delay();
+
+        // Infinity 是全域物件屬性，即它是全域範圍內的變數。
+        // Infinity 的初始值是 Number.POSITIVE_INFINITY (en-US) Infinity 值（正無窮大）值大於其他任何數值。
+        // 該值在數學上表現為無窮大。例如，任何乘以 Infinity 的正整數都是 Infinity，除以 Infinity 的任何數都是 0。
+        const id = String(
+            1 +
+            Object.keys(memoryStorage).reduce((m, id) => Math.max(m, id), - Infinity)
+        );
+
+        return {id, ...(memoryStorage[id] = values)};
+    }
+
 }
 
 // 設定成單例
