@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const shopService = require('../services/shop');
+const bodyParser = require('body-parser');
 const {createShopFormSchema} = require('../moulds/ShopForm');
 
 // ShopController 控制層負責處理接口的部分, 例如: 處理基本的 api 請求接口
@@ -15,6 +16,7 @@ class ShopController {
         router.get('/:shopId', this.getOne);
         router.put('/:shopId', this.put);
         router.delete('/:shopId', this.delete);
+        router.post('/', bodyParser.urlencoded({extended: false}), this.post);
         return router;
     }
 
@@ -67,6 +69,22 @@ class ShopController {
             res.status(404);
         }
         res.send({success});
+    };
+
+    // 用來新增一個店家的 api
+    post = async (req, res) => {
+        const {name} = req.body;
+
+        try {
+            await createShopFormSchema().validate({name});
+        } catch (e) {
+            res.status(400).send({success: false, message: e.message});
+            return;
+        }
+
+        const shopInfo = await this.shopService.create({values: {name}});
+
+        res.send({success: true, data: shopInfo});
     };
 }
 
