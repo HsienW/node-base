@@ -2,6 +2,7 @@ const {Router} = require('express');
 const shopService = require('../services/shop');
 const bodyParser = require('body-parser');
 const {createShopFormSchema} = require('../moulds/ShopForm');
+const cc = require('../utils/callback-catch');
 
 // ShopController 控制層負責處理接口的部分, 例如: 處理基本的 api 請求接口
 class ShopController {
@@ -20,14 +21,14 @@ class ShopController {
         return router;
     }
 
-    getAll = async (req, res) => {
+    getAll = cc(async (req, res) => {
         const {pageIndex, pageSize} = req.query;
         const shopList = await this.shopService.find({pageIndex, pageSize});
 
         res.send({success: true, data: shopList});
-    };
+    });
 
-    getOne = async (req, res) => {
+    getOne = cc(async (req, res) => {
         const {shopId} = req.params;
         const shopList = await this.shopService.find({id: shopId});
 
@@ -36,9 +37,9 @@ class ShopController {
         } else {
             res.status(404).send({success: false, data: null});
         }
-    };
+    });
 
-    put = async (req, res) => {
+    put = cc(async (req, res) => {
         const {shopId} = req.params;
         const {name} = req.query;
 
@@ -59,9 +60,9 @@ class ShopController {
         } else {
             res.status(404).send({success: false, data: null});
         }
-    };
+    });
 
-    delete = async (req, res) => {
+    delete = cc(async (req, res) => {
         const {shopId} = req.params;
         const success = await this.shopService.remove({id: shopId});
 
@@ -69,10 +70,10 @@ class ShopController {
             res.status(404);
         }
         res.send({success});
-    };
+    });
 
     // 用來新增一個店家的 api
-    post = async (req, res) => {
+    post = cc(async (req, res) => {
         const {name} = req.body;
 
         try {
@@ -85,7 +86,7 @@ class ShopController {
         const shopInfo = await this.shopService.create({values: {name}});
 
         res.send({success: true, data: shopInfo});
-    };
+    });
 }
 
 module.exports = async () => {
